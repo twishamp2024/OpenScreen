@@ -155,7 +155,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --json body -q .body > notes.md
-          if ! grep -q "debug-signed" notes.md; then
+          if ! grep -q "The Android APK is debug-signed" notes.md; then
             {
               echo
               echo "> **The Android APK is debug-signed** (Android's auto-generated development key)."
