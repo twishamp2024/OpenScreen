@@ -1,0 +1,1 @@
+{ "type": "error", "code": "TOKEN_EXPIRED", "message": "The QR code expired. Scan the new code on your PC.", "fatal": true }

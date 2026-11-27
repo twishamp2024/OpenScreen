@@ -1,0 +1,14 @@
+{
+  "name": "openscreen-scripts",
+  "private": true,
+  "description": "Repository tooling: protocol validation and consistency checks.",
+  "type": "module",
+  "scripts": {
+    "validate:protocol": "node validate-protocol.mjs",
+    "check:repo": "node check-repo.mjs",
+    "test": "node validate-protocol.mjs && node check-repo.mjs"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0"
+  }
+}

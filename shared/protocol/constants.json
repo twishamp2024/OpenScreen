@@ -1,0 +1,52 @@
+{
+  "protocolVersion": 1,
+  "supportedProtocol": { "min": 1, "max": 1 },
+  "pairingUri": { "scheme": "openscreen", "host": "pair", "maxHosts": 4, "maxNameLength": 32 },
+  "websocket": { "path": "/v1/signal", "subprotocol": "openscreen.v1" },
+  "ports": { "default": 47820, "fallbackFirst": 47821, "fallbackLast": 47829 },
+  "limits": {
+    "maxMessageBytes": 65536,
+    "maxSdpChars": 32768,
+    "maxCandidateChars": 1024,
+    "maxMessagesPerSecond": 50,
+    "maxAuthFailuresPerIpPerMinute": 5,
+    "maxResumeRejections": 3
+  },
+  "timeoutsMs": {
+    "pairingTokenTtl": 300000,
+    "expiredTokenMemory": 600000,
+    "helloTimeout": 10000,
+    "resumeWindow": 60000,
+    "pingInterval": 5000,
+    "peerDeadAfter": 15000,
+    "tcpConnectPerHost": 3000,
+    "iceDisconnectedGrace": 5000
+  },
+  "reconnectBackoffMs": { "initial": 500, "max": 8000, "multiplier": 2 },
+  "errorCodes": [
+    "PROTOCOL_UNSUPPORTED",
+    "TOKEN_INVALID",
+    "TOKEN_EXPIRED",
+    "SESSION_BUSY",
+    "RESUME_REJECTED",
+    "MALFORMED_MESSAGE",
+    "UNEXPECTED_MESSAGE",
+    "MESSAGE_TOO_LARGE",
+    "RATE_LIMITED",
+    "HELLO_TIMEOUT",
+    "CODEC_UNSUPPORTED",
+    "INTERNAL_ERROR"
+  ],
+  "pairingUriErrors": [
+    "NOT_A_PAIRING_URI",
+    "DUPLICATE_PARAM",
+    "MISSING_PARAM",
+    "BAD_VERSION",
+    "UNSUPPORTED_VERSION",
+    "BAD_HOST",
+    "BAD_PORT",
+    "BAD_TOKEN",
+    "BAD_FINGERPRINT",
+    "BAD_NAME"
+  ]
+}

@@ -1,0 +1,1 @@
+{ "type": "hello", "protocol": 1, "token": "lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8", "device": { "manufacturer": "Google", "model": "Pixel 3", "androidVersion": "9", "sdkInt": 28, "appVersion": "0.1.0" }, "display": { "width": 1080, "height": 2160, "densityDpi": 440, "rotation": 0 }, "capabilities": { "codecs": ["H264"], "maxFps": 30 } }

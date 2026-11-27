@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenScreen</string>
+    <string name="tagline_short">Mirror this phone to your Windows PC</string>
+    <string name="view_only_note">View-only: your PC can see this screen while you stream, but it can never tap, type or control your phone. Nothing leaves your local network.</string>
+    <string name="version_line">Version %1$s · protocol v%2$d</string>
+
+    <!-- Status -->
+    <string name="status_not_paired">Not paired</string>
+    <string name="status_connecting">Connecting…</string>
+    <string name="status_negotiating">Setting up video link…</string>
+    <string name="status_ready">Connected</string>
+    <string name="status_streaming">Streaming</string>
+    <string name="status_reconnecting">Reconnecting…</string>
+    <string name="hint_idle">Open OpenScreen on your PC and scan the QR code it shows.</string>
+    <string name="hint_no_wifi">Connect to the same Wi-Fi network as your PC.</string>
+    <string name="hint_connecting_to">Contacting %1$s on your network.</string>
+    <string name="hint_negotiating">Checking that video can reach your PC.</string>
+    <string name="hint_ready">Tap Start streaming and choose “Entire screen” to show your phone on the PC.</string>
+    <string name="hint_reconnecting">Connection interrupted. Trying again (attempt %1$d)… Your stream continues when it comes back.</string>
+    <string name="receiver_windows">Windows PC</string>
+
+    <!-- Actions -->
+    <string name="action_scan_qr">Scan QR code on PC</string>
+    <string name="action_paste_link">Paste pairing link instead</string>
+    <string name="action_start_streaming">Start streaming</string>
+    <string name="action_stop_streaming">Stop streaming</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_connect">Connect</string>
+    <string name="action_scan_again">Scan the QR code again</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_ok">OK</string>
+
+    <!-- Quality -->
+    <string name="quality_title">Video quality</string>
+    <string name="quality_resolution">Resolution</string>
+    <string name="quality_fps">Frame rate</string>
+    <string name="quality_hint">Higher settings need a strong Wi-Fi signal. Quality adapts automatically when the network is busy.</string>
+    <string name="quality_locked">Stop streaming to change quality.</string>
+    <string name="quality_no_60">This phone\'s video encoder does not report 60 FPS at 1080p, so 30 FPS is used.</string>
+
+    <!-- Diagnostics -->
+    <string name="diag_title">Network diagnostics</string>
+    <string name="diag_wifi">Wi-Fi connected</string>
+    <string name="diag_phone_ip">Phone address</string>
+    <string name="diag_internet">Internet on Wi-Fi</string>
+    <string name="diag_pc_ip">PC address</string>
+    <string name="diag_same_subnet">Same subnet as PC</string>
+    <string name="diag_fps">Sent FPS</string>
+    <string name="diag_bitrate">Bitrate</string>
+    <string name="diag_resolution">Encoded size</string>
+    <string name="diag_rtt">Round trip</string>
+    <string name="diag_available">Estimated bandwidth</string>
+    <string name="diag_encoder">Encoder</string>
+    <string name="diag_limit">Quality limited by</string>
+    <string name="diag_yes">Yes</string>
+    <string name="diag_no">No</string>
+    <string name="diag_no_lan_only">No (local only — fine)</string>
+
+    <!-- Scanner / pairing -->
+    <string name="scan_instructions">Point the camera at the QR code in the OpenScreen window on your PC</string>
+    <string name="paste_title">Paste pairing link</string>
+    <string name="paste_hint">openscreen://pair?…</string>
+    <string name="qr_not_openscreen">This isn\'t an OpenScreen code. Scan the code shown in the OpenScreen window on your PC.</string>
+    <string name="qr_update_phone">Your PC uses a newer version of OpenScreen. Update OpenScreen on your phone.</string>
+    <string name="qr_damaged">This OpenScreen code couldn\'t be read completely. Scan it again.</string>
+    <string name="confirm_title">Connect to this PC?</string>
+    <string name="confirm_body">%1$s (%2$s). Nothing is shared until you tap Start streaming.</string>
+    <string name="warn_different_network">Warning: your phone does not seem to be on the same network as this PC. Connect both to the same Wi-Fi if the connection fails.</string>
+
+    <!-- Permissions -->
+    <string name="err_capture_denied">Screen sharing wasn\'t allowed. Tap Start streaming again and choose “Entire screen”, then Start.</string>
+    <string name="err_camera_denied">OpenScreen needs the camera only to scan the QR code. You can paste the pairing link instead.</string>
+
+    <!-- Errors (see docs/TROUBLESHOOTING.md) -->
+    <string name="err_no_wifi_title">No Wi-Fi</string>
+    <string name="err_no_wifi_body">Connect your phone to the same Wi-Fi network as your PC, then scan the code again.</string>
+    <string name="err_unreachable_title">Can\'t reach your PC</string>
+    <string name="err_unreachable_body">The connection timed out. Your Wi-Fi may block devices from talking to each other (common on guest, hotel and campus networks), or Windows Firewall is blocking OpenScreen. Allow OpenScreen on Private networks, or use a different network.</string>
+    <string name="err_refused_title">Your PC isn\'t listening</string>
+    <string name="err_refused_body">OpenScreen on your PC may have been closed or restarted. Open it and scan the new QR code.</string>
+    <string name="err_cert_title">Security check failed</string>
+    <string name="err_cert_body">The PC that answered is not the one in the QR code. Scan the code currently shown on your PC. If this keeps happening, something on this network may be intercepting traffic — use a different network.</string>
+    <string name="err_handshake_title">Couldn\'t talk to your PC</string>
+    <string name="err_handshake_body">Something other than OpenScreen answered at this address. Scan the code currently shown on your PC.</string>
+    <string name="err_version_title">Update needed</string>
+    <string name="err_version_body">Your phone and PC run incompatible versions of OpenScreen. Install the same release on both.</string>
+    <string name="err_token_invalid_title">QR code no longer valid</string>
+    <string name="err_token_invalid_body">Each code works once. Scan the code currently shown on your PC.</string>
+    <string name="err_token_expired_title">QR code expired</string>
+    <string name="err_token_expired_body">Codes expire after 5 minutes. Scan the new code on your PC.</string>
+    <string name="err_busy_title">PC is busy</string>
+    <string name="err_busy_body">Your PC is already showing another phone. Stop that session first.</string>
+    <string name="err_rate_title">Too many attempts</string>
+    <string name="err_rate_body">Wait a minute, then try again.</string>
+    <string name="err_hello_title">No response from your PC</string>
+    <string name="err_hello_body">The PC didn\'t answer in time. Try again.</string>
+    <string name="err_codec_title">Video format not supported</string>
+    <string name="err_codec_body">Your PC can\'t decode this phone\'s video format. Update Microsoft Edge WebView2 on the PC.</string>
+    <string name="err_media_title">Connected, but video can\'t get through</string>
+    <string name="err_media_body">Your PC was reached, but the video connection (UDP) was blocked. Allow OpenScreen through Windows Firewall on Private networks, set the network to Private, or try another Wi-Fi.</string>
+    <string name="err_lost_title">Connection lost</string>
+    <string name="err_lost_body">The connection didn\'t come back within a minute. Scan the QR code on your PC again.</string>
+    <string name="err_closed_title">Session ended</string>
+    <string name="err_closed_body">The viewer on your PC was closed. Scan the code again to start a new session.</string>
+    <string name="err_protocol_title">Unexpected response</string>
+    <string name="err_protocol_body">Your PC sent something this app doesn\'t understand. Make sure both apps are up to date; if it continues, please report a bug.</string>
+    <string name="err_internal_title">Something went wrong</string>
+    <string name="err_internal_body">An unexpected error occurred. Try again; if it continues, please report a bug.</string>
+
+    <!-- Notification -->
+    <string name="notification_channel">Screen streaming</string>
+    <string name="notification_title">Streaming your screen</string>
+    <string name="notification_text">Your screen is visible on your paired PC.</string>
+</resources>

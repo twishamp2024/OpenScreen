@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openscreen:protocol:signaling:v1",
+  "title": "OpenScreen signaling message, protocol v1",
+  "description": "Every WebSocket text frame is exactly one of these messages. Unknown fields are allowed (and ignored); unknown types are not. See docs/PROTOCOL.md.",
+  "oneOf": [
+    { "$ref": "#/$defs/hello" },
+    { "$ref": "#/$defs/resume" },
+    { "$ref": "#/$defs/offer" },
+    { "$ref": "#/$defs/streamState" },
+    { "$ref": "#/$defs/welcome" },
+    { "$ref": "#/$defs/resumed" },
+    { "$ref": "#/$defs/answer" },
+    { "$ref": "#/$defs/ice" },
+    { "$ref": "#/$defs/bye" },
+    { "$ref": "#/$defs/error" }
+  ],
+  "$defs": {
+    "token": {
+      "description": "32 random bytes, base64url without padding.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "sessionId": {
+      "description": "16 random bytes, base64url without padding.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{22}$"
+    },
+    "protocolVersion": { "type": "integer", "minimum": 1 },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+    },
+    "codec": { "enum": ["H264", "VP8", "VP9", "AV1"] },
+    "rotation": { "enum": [0, 90, 180, 270] },
+    "pixels": { "type": "integer", "minimum": 1, "maximum": 16384 },
+    "features": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 32, "pattern": "^[a-z0-9][a-z0-9.-]*$" }
+    },
+    "sdp": { "type": "string", "minLength": 3, "maxLength": 32768, "pattern": "^v=0" },
+    "resumeWindowMs": { "type": "integer", "minimum": 0, "maximum": 300000 },
+
+    "hello": {
+      "type": "object",
+      "required": ["type", "protocol", "token", "device", "display", "capabilities"],
+      "properties": {
+        "type": { "const": "hello" },
+        "protocol": { "$ref": "#/$defs/protocolVersion" },
+        "token": { "$ref": "#/$defs/token" },
+        "device": {
+          "type": "object",
+          "required": ["manufacturer", "model", "androidVersion", "sdkInt", "appVersion"],
+          "properties": {
+            "manufacturer": { "type": "string", "minLength": 1, "maxLength": 64 },
+            "model": { "type": "string", "minLength": 1, "maxLength": 64 },
+            "androidVersion": { "type": "string", "minLength": 1, "maxLength": 16 },
+            "sdkInt": { "type": "integer", "minimum": 29, "maximum": 100 },
+            "appVersion": { "type": "string", "minLength": 1, "maxLength": 32 }
+          }
+        },
+        "display": {
+          "type": "object",
+          "required": ["width", "height", "densityDpi", "rotation"],
+          "properties": {
+            "width": { "$ref": "#/$defs/pixels" },
+            "height": { "$ref": "#/$defs/pixels" },
+            "densityDpi": { "type": "integer", "minimum": 1, "maximum": 2000 },
+            "rotation": { "$ref": "#/$defs/rotation" }
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "required": ["codecs", "maxFps"],
+          "properties": {
+            "codecs": { "type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": { "$ref": "#/$defs/codec" } },
+            "maxFps": { "type": "integer", "minimum": 1, "maximum": 240 }
+          }
+        },
+        "features": { "$ref": "#/$defs/features" }
+      }
+    },
+
+    "resume": {
+      "type": "object",
+      "required": ["type", "protocol", "sessionId", "resumeToken"],
+      "properties": {
+        "type": { "const": "resume" },
+        "protocol": { "$ref": "#/$defs/protocolVersion" },
+        "sessionId": { "$ref": "#/$defs/sessionId" },
+        "resumeToken": { "$ref": "#/$defs/token" }
+      }
+    },
+
+    "offer": {
+      "type": "object",
+      "required": ["type", "sdp"],
+      "properties": {
+        "type": { "const": "offer" },
+        "sdp": { "$ref": "#/$defs/sdp" },
+        "iceRestart": { "type": "boolean" }
+      }
+    },
+
+    "streamState": {
+      "type": "object",
+      "required": ["type", "state"],
+      "properties": {
+        "type": { "const": "stream-state" },
+        "state": { "enum": ["ready", "streaming", "paused", "stopped"] },
+        "video": {
+          "type": "object",
+          "required": ["width", "height", "fps", "codec", "rotation"],
+          "properties": {
+            "width": { "$ref": "#/$defs/pixels" },
+            "height": { "$ref": "#/$defs/pixels" },
+            "fps": { "type": "integer", "minimum": 1, "maximum": 240 },
+            "codec": { "$ref": "#/$defs/codec" },
+            "rotation": { "$ref": "#/$defs/rotation" }
+          }
+        },
+        "reason": { "enum": ["user", "projection-revoked", "encoder-error", "app-backgrounded"] }
+      },
+      "if": { "properties": { "state": { "const": "streaming" } } },
+      "then": { "required": ["video"] }
+    },
+
+    "welcome": {
+      "type": "object",
+      "required": ["type", "protocol", "sessionId", "resumeToken", "resumeWindowMs", "receiver"],
+      "properties": {
+        "type": { "const": "welcome" },
+        "protocol": { "$ref": "#/$defs/protocolVersion" },
+        "sessionId": { "$ref": "#/$defs/sessionId" },
+        "resumeToken": { "$ref": "#/$defs/token" },
+        "resumeWindowMs": { "$ref": "#/$defs/resumeWindowMs" },
+        "receiver": {
+          "type": "object",
+          "required": ["name", "os", "appVersion"],
+          "properties": {
+            "name": { "$ref": "#/$defs/displayName" },
+            "os": { "const": "windows" },
+            "appVersion": { "type": "string", "minLength": 1, "maxLength": 32 }
+          }
+        },
+        "features": { "$ref": "#/$defs/features" }
+      }
+    },
+
+    "resumed": {
+      "type": "object",
+      "required": ["type", "sessionId", "resumeToken", "resumeWindowMs"],
+      "properties": {
+        "type": { "const": "resumed" },
+        "sessionId": { "$ref": "#/$defs/sessionId" },
+        "resumeToken": { "$ref": "#/$defs/token" },
+        "resumeWindowMs": { "$ref": "#/$defs/resumeWindowMs" }
+      }
+    },
+
+    "answer": {
+      "type": "object",
+      "required": ["type", "sdp"],
+      "properties": {
+        "type": { "const": "answer" },
+        "sdp": { "$ref": "#/$defs/sdp" }
+      }
+    },
+
+    "ice": {
+      "type": "object",
+      "required": ["type", "candidate"],
+      "properties": {
+        "type": { "const": "ice" },
+        "candidate": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["candidate", "sdpMid", "sdpMLineIndex"],
+              "properties": {
+                "candidate": { "type": "string", "maxLength": 1024 },
+                "sdpMid": { "type": ["string", "null"], "maxLength": 32 },
+                "sdpMLineIndex": { "type": ["integer", "null"], "minimum": 0, "maximum": 15 }
+              },
+              "not": {
+                "properties": { "sdpMid": { "type": "null" }, "sdpMLineIndex": { "type": "null" } }
+              }
+            }
+          ]
+        }
+      }
+    },
+
+    "bye": {
+      "type": "object",
+      "required": ["type", "reason"],
+      "properties": {
+        "type": { "const": "bye" },
+        "reason": { "enum": ["user", "receiver-closed", "sender-closed", "timeout", "error"] }
+      }
+    },
+
+    "error": {
+      "type": "object",
+      "required": ["type", "code", "message", "fatal"],
+      "properties": {
+        "type": { "const": "error" },
+        "code": {
+          "enum": [
+            "PROTOCOL_UNSUPPORTED",
+            "TOKEN_INVALID",
+            "TOKEN_EXPIRED",
+            "SESSION_BUSY",
+            "RESUME_REJECTED",
+            "MALFORMED_MESSAGE",
+            "UNEXPECTED_MESSAGE",
+            "MESSAGE_TOO_LARGE",
+            "RATE_LIMITED",
+            "HELLO_TIMEOUT",
+            "CODEC_UNSUPPORTED",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": { "type": "string", "maxLength": 256 },
+        "fatal": { "type": "boolean" },
+        "supported": {
+          "type": "object",
+          "required": ["min", "max"],
+          "properties": {
+            "min": { "$ref": "#/$defs/protocolVersion" },
+            "max": { "$ref": "#/$defs/protocolVersion" }
+          }
+        }
+      }
+    }
+  }
+}

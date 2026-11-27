@@ -1,0 +1,63 @@
+/* Design tokens. Brand colours match android/app/.../ui/theme/Theme.kt. */
+:root {
+  color-scheme: light dark;
+  --brand: #2f6bff;
+  --brand-strong: #1f4fd1;
+  --accent: #0fa3a3;
+
+  --bg: #f7f8fb;
+  --surface: #ffffff;
+  --surface-2: #eef1f6;
+  --text: #11141a;
+  --text-muted: #5b6372;
+  --border: #dde2ea;
+
+  --ok: #1a9e55;
+  --warn: #c98a00;
+  --error: #d1343f;
+
+  --radius-s: 6px;
+  --radius-m: 12px;
+  --radius-l: 18px;
+  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 4px 16px rgb(16 24 40 / 6%);
+
+  --font: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --brand: #6f97ff;
+    --brand-strong: #9db8ff;
+    --bg: #0f1115;
+    --surface: #171a20;
+    --surface-2: #1f232b;
+    --text: #eef1f6;
+    --text-muted: #9aa3b2;
+    --border: #2a2f39;
+    --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 4px 16px rgb(0 0 0 / 30%);
+  }
+}
+
+:root[data-theme="dark"] {
+  --brand: #6f97ff;
+  --brand-strong: #9db8ff;
+  --bg: #0f1115;
+  --surface: #171a20;
+  --surface-2: #1f232b;
+  --text: #eef1f6;
+  --text-muted: #9aa3b2;
+  --border: #2a2f39;
+  --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 4px 16px rgb(0 0 0 / 30%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ease: linear;
+  }
+  * {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}

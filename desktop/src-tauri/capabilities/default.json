@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-window",
+  "description": "Home window: status, QR code, settings. App commands are validated in Rust; only core event access is granted.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

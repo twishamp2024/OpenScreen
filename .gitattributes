@@ -1,0 +1,11 @@
+# Keep LF everywhere (Prettier, rustfmt and shell scripts expect it), regardless
+# of a contributor's core.autocrlf setting. Windows batch files need CRLF.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets
+*.png binary
+*.ico binary
+*.icns binary
+*.jar binary

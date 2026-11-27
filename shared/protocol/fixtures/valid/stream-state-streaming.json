@@ -1,0 +1,1 @@
+{ "type": "stream-state", "state": "streaming", "video": { "width": 1080, "height": 2400, "fps": 30, "codec": "H264", "rotation": 0 } }

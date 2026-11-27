@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 108 108">
+  <!-- OpenScreen app icon source. Regenerate PNG/ICO with: npx tauri icon src-tauri/icons/icon-source.svg -->
+  <rect x="0" y="0" width="108" height="108" rx="24" fill="#2F6BFF"/>
+  <rect x="29" y="34" width="50" height="34" rx="5" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+  <rect x="46" y="72" width="16" height="4" fill="#FFFFFF"/>
+  <rect x="24" y="48" width="18" height="30" rx="3" fill="#FFFFFF"/>
+  <rect x="28" y="52" width="10" height="20" fill="#2F6BFF"/>
+  <path d="M48 56a8 8 0 0 1 8 8" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M48 47a17 17 0 0 1 17 17" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+</svg>

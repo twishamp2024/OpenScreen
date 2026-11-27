@@ -1,0 +1,81 @@
+{
+  "description": "Pairing URI test vectors (docs/PROTOCOL.md section 2). Each implementation's parser must accept every 'valid' case with exactly the 'expected' values and reject every 'invalid' case with the given 'error' code. Checks run in this order: NOT_A_PAIRING_URI, DUPLICATE_PARAM, MISSING_PARAM, BAD_VERSION, UNSUPPORTED_VERSION, BAD_HOST, BAD_PORT, BAD_TOKEN, BAD_FINGERPRINT, BAD_NAME.",
+  "supportedVersion": 1,
+  "valid": [
+    {
+      "name": "minimal",
+      "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8",
+      "expected": {
+        "version": 1,
+        "hosts": ["192.168.1.20"],
+        "port": 47820,
+        "token": "lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8",
+        "fingerprint": "Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8",
+        "name": null
+      }
+    },
+    {
+      "name": "multiple hosts, encoded name, params in other order",
+      "uri": "openscreen://pair?n=Study%20PC&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&p=47821&h=10.0.0.5,172.16.4.2&v=1",
+      "expected": {
+        "version": 1,
+        "hosts": ["10.0.0.5", "172.16.4.2"],
+        "port": 47821,
+        "token": "lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8",
+        "fingerprint": "Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8",
+        "name": "Study PC"
+      }
+    },
+    {
+      "name": "unicode name, unknown param ignored, upper-case scheme and host",
+      "uri": "OPENSCREEN://PAIR?v=1&h=172.31.255.254&p=1&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8&n=%E5%B7%A5%E4%BD%9C%E5%AE%A4&x=future",
+      "expected": {
+        "version": 1,
+        "hosts": ["172.31.255.254"],
+        "port": 1,
+        "token": "lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8",
+        "fingerprint": "Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8",
+        "name": "工作室"
+      }
+    },
+    {
+      "name": "four hosts, max port",
+      "uri": "openscreen://pair?v=1&h=192.168.0.1,192.168.0.2,10.255.255.255,172.20.0.1&p=65535&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8",
+      "expected": {
+        "version": 1,
+        "hosts": ["192.168.0.1", "192.168.0.2", "10.255.255.255", "172.20.0.1"],
+        "port": 65535,
+        "token": "lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8",
+        "fingerprint": "Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8",
+        "name": null
+      }
+    }
+  ],
+  "invalid": [
+    { "name": "web URL", "uri": "https://example.com/pair?v=1", "error": "NOT_A_PAIRING_URI" },
+    { "name": "wrong host part", "uri": "openscreen://connect?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "NOT_A_PAIRING_URI" },
+    { "name": "plain text", "uri": "hello world", "error": "NOT_A_PAIRING_URI" },
+    { "name": "duplicate token", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&t=nn62UTUoym2gvUPDwDAU-ba7d5i5KIWycUUsxmw_VEM&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "DUPLICATE_PARAM" },
+    { "name": "missing fingerprint", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8", "error": "MISSING_PARAM" },
+    { "name": "missing everything", "uri": "openscreen://pair", "error": "MISSING_PARAM" },
+    { "name": "version not a number", "uri": "openscreen://pair?v=one&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_VERSION" },
+    { "name": "version zero", "uri": "openscreen://pair?v=0&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_VERSION" },
+    { "name": "future version", "uri": "openscreen://pair?v=2&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "UNSUPPORTED_VERSION" },
+    { "name": "public IP", "uri": "openscreen://pair?v=1&h=8.8.8.8&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_HOST" },
+    { "name": "loopback", "uri": "openscreen://pair?v=1&h=127.0.0.1&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_HOST" },
+    { "name": "just outside 172.16/12", "uri": "openscreen://pair?v=1&h=172.32.0.1&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_HOST" },
+    { "name": "hostname instead of IP", "uri": "openscreen://pair?v=1&h=my-pc.local&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_HOST" },
+    { "name": "octet with leading zero", "uri": "openscreen://pair?v=1&h=192.168.01.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_HOST" },
+    { "name": "five hosts", "uri": "openscreen://pair?v=1&h=10.0.0.1,10.0.0.2,10.0.0.3,10.0.0.4,10.0.0.5&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_HOST" },
+    { "name": "empty host in list", "uri": "openscreen://pair?v=1&h=10.0.0.1,,10.0.0.2&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_HOST" },
+    { "name": "port zero", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=0&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_PORT" },
+    { "name": "port too large", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=65536&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_PORT" },
+    { "name": "port with sign", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=+47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_PORT" },
+    { "name": "token too short", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=abc&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_TOKEN" },
+    { "name": "token standard base64 with padding", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1+XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8=&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8", "error": "BAD_TOKEN" },
+    { "name": "fingerprint as hex", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=3e3e3f034267", "error": "BAD_FINGERPRINT" },
+    { "name": "empty name", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8&n=", "error": "BAD_NAME" },
+    { "name": "name with newline", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8&n=Study%0APC", "error": "BAD_NAME" },
+    { "name": "name too long", "uri": "openscreen://pair?v=1&h=192.168.1.20&p=47820&t=lXPoAB1-XtnXbHZwLlJ13iMUH7T1NeqCWmA9FvHqSe8&f=Pj4_A0Jni6caoMTewX711vX8StLStu7E1ZA-89W1rz8&n=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "error": "BAD_NAME" }
+  ]
+}

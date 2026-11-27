@@ -1,0 +1,56 @@
+name: Bug report
+description: Something does not work as described.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security problem? Do **not** file it here — see SECURITY.md.
+        Please remove anything personal from logs and screenshots (IP addresses on your LAN are fine).
+  - type: dropdown
+    id: app
+    attributes:
+      label: Which app?
+      options: [Android, Windows, Both / connection]
+    validations: { required: true }
+  - type: input
+    id: versions
+    attributes:
+      label: App versions
+      placeholder: "Android 0.1.0, Windows 0.1.0"
+    validations: { required: true }
+  - type: input
+    id: devices
+    attributes:
+      label: Devices
+      placeholder: "Pixel 8 on Android 15; Windows 11 24H2, Intel i5-1240P"
+    validations: { required: true }
+  - type: dropdown
+    id: network
+    attributes:
+      label: Network
+      options: [Home Wi-Fi, Phone and PC on different bands (2.4/5 GHz), Mesh Wi-Fi, PC on Ethernet / phone on Wi-Fi, Guest / hotel / campus Wi-Fi, Phone hotspot, Other]
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+        2.
+        3.
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+    validations: { required: true }
+  - type: textarea
+    id: error
+    attributes:
+      label: Error message or code shown in the app
+      render: text
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs (optional)
+      render: text

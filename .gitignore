@@ -1,0 +1,58 @@
+# ── OS / editors ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+
+# ── Node / desktop frontend ────────────────────────────────────
+node_modules/
+dist/
+dist-ssr/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+.eslintcache
+.vite/
+
+# ── Rust / Tauri ───────────────────────────────────────────────
+target/
+desktop/src-tauri/gen/schemas/
+
+# ── Android / Gradle ───────────────────────────────────────────
+.gradle/
+.kotlin/
+build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+output-metadata.json
+
+# ── Secrets: never commit ──────────────────────────────────────
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+keystore.properties
+signing.properties
+.env
+.env.*
+!.env.example
+
+# ── Release outputs ────────────────────────────────────────────
+release/
+*.msi
+*.exe
+*.nsis.zip
+*.sig
+SHA256SUMS*
