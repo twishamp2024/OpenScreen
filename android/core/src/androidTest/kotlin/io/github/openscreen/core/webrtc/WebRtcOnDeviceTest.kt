@@ -3,7 +3,9 @@ package io.github.openscreen.core.webrtc
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import io.github.openscreen.core.capture.ScreenFeed
 import io.github.openscreen.core.protocol.IceCandidatePayload
+import io.github.openscreen.core.protocol.VideoInfo
 import io.github.openscreen.core.session.IceState
 import io.github.openscreen.core.session.PeerListener
 import kotlinx.coroutines.runBlocking
@@ -68,6 +70,31 @@ class WebRtcOnDeviceTest {
             assertTrue("only host candidates: $lines", lines.all { " typ host" in it })
         } finally {
             peer.close()
+        }
+    }
+
+    @Test
+    fun senderCapsAreApplied() = runBlocking {
+        val engine = WebRtcEngine.get(context)
+        val peer = WebRtcPeer(engine, object : PeerListener {
+            override fun onLocalCandidate(candidate: IceCandidatePayload?) = Unit
+            override fun onIceState(state: IceState) = Unit
+        })
+        val source = engine.factory.createVideoSource(true)
+        val track = engine.factory.createVideoTrack("t", source)
+        try {
+            peer.createOffer(iceRestart = false)
+            peer.setVideo(ScreenFeed(track, VideoInfo(880, 1920, 30, "H264", 0), 8_000_000, 500_000))
+            val p = peer.senderParameters
+            val e = p.encodings.first()
+            Log.i("OpenScreenTest", "setParameters=${peer.lastParametersApplied} maxFps=${e.maxFramerate} maxBps=${e.maxBitrateBps} minBps=${e.minBitrateBps} degradation=${p.degradationPreference}")
+            assertTrue("setParameters rejected", peer.lastParametersApplied == true)
+            assertTrue("frame-rate cap not applied: ${e.maxFramerate}", e.maxFramerate == 30)
+            assertTrue("bitrate cap not applied: ${e.maxBitrateBps}", e.maxBitrateBps == 8_000_000)
+        } finally {
+            peer.close()
+            track.dispose()
+            source.dispose()
         }
     }
 }

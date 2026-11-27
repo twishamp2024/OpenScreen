@@ -1,7 +1,7 @@
 {
   "name": "openscreen-desktop",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenScreen receiver for Windows (Tauri 2 + React).",
   "license": "MIT",
   "type": "module",

@@ -49,7 +49,8 @@ the measurement procedure below.
 
 | Date | Phone (Android) | PC | Network | Result |
 |---|---|---|---|---|
-| 2026-11-27 | Redmi Note 7S (Android 10 / MIUI) | Windows 11, WebView2 158 | Home Wi-Fi, same /24 | M1, M2, M3, M8 pass: QR pairing, hardware H.264 (`OMX.qcom.video.encoder.avc`), live video, rotation re-fit. Open: occasional "encoder queue full" frame drops around rotation/heavy motion. |
+| 2026-11-27 (0.1.0) | Redmi Note 7S (Android 10 / MIUI) | Windows 11, WebView2 158 | Home Wi-Fi, same /24 | M1, M2, M3, M8 pass: QR pairing, hardware H.264 (`OMX.qcom.video.encoder.avc`), live video, rotation re-fit. Open: occasional "encoder queue full" frame drops around rotation/heavy motion. |
+| 2026-11-27 (0.1.1) | same | same | same | Same cases after the frame pacer: encoder drops 128 → 14 over a comparable session with 3 rotations and heavy motion; none follow an encoder restart. |
 
 ## Manual test procedure (real hardware)
 

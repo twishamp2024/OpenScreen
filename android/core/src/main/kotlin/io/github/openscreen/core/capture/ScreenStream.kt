@@ -6,6 +6,7 @@ import android.hardware.display.VirtualDisplay
 import android.media.projection.MediaProjection
 import android.os.Handler
 import android.os.SystemClock
+import android.util.Log
 import android.view.Surface
 import io.github.openscreen.core.protocol.VideoInfo
 import io.github.openscreen.core.session.VideoFeed
@@ -91,6 +92,7 @@ class ScreenStream(
      */
     private inner class ProjectionCapturer : VideoCapturer, VideoSink {
         private var observer: CapturerObserver? = null
+        private val pacer = FramePacer(fps)
         private var display: VirtualDisplay? = null
         private var width = 0
         private var height = 0
@@ -140,6 +142,10 @@ class ScreenStream(
             onHandler {
                 textureHelper.setTextureSize(width, height)
                 display?.resize(width, height, densityDpi)
+                // Skip the frames that still show the old layout while the encoder restarts,
+                // then send one fresh frame so even a static screen appears right away.
+                pacer.onResize(System.nanoTime())
+                handler.postDelayed({ if (frames > 0) textureHelper.forceFrame() }, SETTLE_MS + 10)
             }
         }
 
@@ -150,13 +156,15 @@ class ScreenStream(
                 display?.release()
                 display = null
                 observer?.onCapturerStopped()
+                Log.i(TAG, "capture stopped: ${pacer.forwarded} frames sent, ${pacer.skipped} paced/settling")
             }
         }
 
         override fun onFrame(frame: VideoFrame) {
             frames++
             lastFrameAt = SystemClock.elapsedRealtime()
-            observer?.onFrameCaptured(frame)
+            // Never hand the encoder more than the selected frame rate (see FramePacer).
+            if (pacer.shouldForward(frame.timestampNs)) observer?.onFrameCaptured(frame)
         }
 
         override fun dispose() = Unit
@@ -177,6 +185,8 @@ class ScreenStream(
     }
 
     private companion object {
+        const val TAG = "OpenScreenCapture"
         const val KEEPALIVE_MS = 500L
+        const val SETTLE_MS = 100L
     }
 }

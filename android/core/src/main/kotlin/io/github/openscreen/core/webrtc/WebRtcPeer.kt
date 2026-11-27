@@ -46,6 +46,10 @@ class WebRtcPeerFactory(private val engine: WebRtcEngine) : PeerFactory {
 class WebRtcPeer(private val engine: WebRtcEngine, private val listener: PeerListener) : Peer {
     private val pc: PeerConnection
     private val transceiver: RtpTransceiver
+    /** Result of the last setParameters call (exposed for on-device tests). */
+    internal var lastParametersApplied: Boolean? = null
+        private set
+    internal val senderParameters: RtpParameters get() = transceiver.sender.parameters
     private var lastBytes: Long? = null
     private var lastStatsUs: Double? = null
 
@@ -114,7 +118,8 @@ class WebRtcPeer(private val engine: WebRtcEngine, private val listener: PeerLis
                 maxFramerate = screen.info.fps
                 scaleResolutionDownBy = 1.0
             }
-            if (!sender.setParameters(params)) {
+            lastParametersApplied = sender.setParameters(params)
+            if (lastParametersApplied == false) {
                 Log.w(TAG, "setParameters rejected: bitrate/frame-rate caps not applied")
             }
         }
