@@ -33,6 +33,12 @@
 | **Screen sharing was stopped** | Android ended MediaProjection (user tapped *Stop sharing* in the status bar, or the system revoked it) | Tap **Start Streaming** again and allow sharing. |
 | **Screen capture permission denied** | The consent dialog was dismissed | Tap **Start Streaming** and choose **Entire screen** → **Start**. |
 
+## "App not installed" / package conflict on the phone
+
+Android only updates an app in place when the new APK is signed with the same
+key. Debug builds from different machines or CI runs use different keys.
+Uninstall OpenScreen from the phone, then install the new APK.
+
 ## Client isolation (guest Wi-Fi, hotels, campuses, some mesh "IoT" networks)
 
 Symptom: *Can't reach your PC — connection timed out* even though both

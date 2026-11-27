@@ -47,32 +47,46 @@ The `core` unit tests read `shared/protocol/` directly; Gradle passes the path
 as the `openscreen.protocolDir` system property, so always run them through
 Gradle.
 
-## Release builds and signing
+## Signing (optional)
 
-Release signing reads **only environment variables**; no keystore or password
-is ever stored in the repository:
+**You don't need any signing setup to build, install, test or develop.**
+`assembleDebug` / `installDebug` sign with Android's automatically generated
+debug key (`~/.android/debug.keystore`), and that APK is what you install on
+your phone while developing.
 
-| Variable | Meaning |
+Release signing is only for publishing an APK that future releases can update
+in place. It is optional everywhere:
+
+| Situation | Result |
 |---|---|
-| `OPENSCREEN_KEYSTORE_PATH` | path to the `.jks` keystore |
-| `OPENSCREEN_KEYSTORE_PASSWORD` | keystore password |
-| `OPENSCREEN_KEY_ALIAS` | key alias |
-| `OPENSCREEN_KEY_PASSWORD` | key password |
+| Local `assembleRelease` without signing variables | Unsigned release APK (not installable; use the debug APK instead) |
+| Local `assembleRelease` with the variables below | Release-signed APK |
+| GitHub release, no signing secrets | `OpenScreen-<version>-debug.apk`, debug-signed, labelled in the release notes |
+| GitHub release with the four secrets | `OpenScreen-<version>.apk`, release-signed |
 
-```
-./gradlew assembleRelease   # app/build/outputs/apk/release/
-```
+Debug keys differ between machines (and between CI runs), and Android only
+updates an app in place when the signatures match. If installing reports a
+conflict, uninstall OpenScreen from the phone first.
 
-Without those variables the release APK is built unsigned. In CI the
-keystore is stored base64-encoded in a GitHub Actions secret and decoded to a
-temporary file only for the release job (Phase 11).
+### Enabling release signing later
 
-Create a keystore once, keep it **outside** the repository, and back it up —
+Environment variables (local) / repository secrets (CI):
+
+| Local variable | CI secret | Meaning |
+|---|---|---|
+| `OPENSCREEN_KEYSTORE_PATH` | `ANDROID_KEYSTORE_BASE64` (file, base64) | the `.jks` keystore |
+| `OPENSCREEN_KEYSTORE_PASSWORD` | `ANDROID_KEYSTORE_PASSWORD` | keystore password |
+| `OPENSCREEN_KEY_ALIAS` | `ANDROID_KEY_ALIAS` | key alias |
+| `OPENSCREEN_KEY_PASSWORD` | `ANDROID_KEY_PASSWORD` | key password |
+
+Create the keystore once, keep it **outside** the repository and back it up —
 losing it means users cannot upgrade in place:
 
 ```
 keytool -genkeypair -v -keystore openscreen-release.jks -keyalg RSA -keysize 4096 -validity 10000 -alias openscreen
 ```
+
+No keystore, password or key is ever committed.
 
 ## Version numbers
 

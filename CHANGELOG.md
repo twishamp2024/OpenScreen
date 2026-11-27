@@ -17,6 +17,11 @@ both apps share one version number.
 ### Added
 - On-device test that the encoder's frame-rate and bitrate caps are applied.
 
+### Changed
+- **Release signing is optional.** Without signing secrets, GitHub releases
+  publish the debug-signed APK (`OpenScreen-<version>-debug.apk`) instead of
+  failing. Local builds never required signing.
+
 ## [0.1.0] — 2026-11-27
 
 First public version: view-only Android → Windows mirroring over local Wi-Fi

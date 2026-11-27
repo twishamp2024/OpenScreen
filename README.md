@@ -46,9 +46,17 @@ end-to-end with WebRTC's DTLS-SRTP. Details:
 
 ## Install
 
-Installers will be published on the
-[Releases](../../releases) page: an `.apk` for Android and an `.exe` (NSIS)
-installer for Windows, each with SHA-256 checksums. No release exists yet.
+Download from the [Releases](../../releases) page:
+
+- **Android:** `OpenScreen-<version>-debug.apk`. Open it on the phone and allow
+  installing from your browser/file manager. It is signed with Android's
+  development (debug) key; if Android reports a conflict with an older install,
+  uninstall OpenScreen first.
+- **Windows:** `OpenScreen-<version>-windows-x64-setup.exe`. The installer is
+  not code-signed yet, so SmartScreen may warn — choose *More info → Run anyway*.
+- `SHA256SUMS.txt` lets you verify both downloads.
+
+Changes per version: [CHANGELOG.md](CHANGELOG.md).
 
 ## Build from source
 
